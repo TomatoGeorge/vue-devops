@@ -4,11 +4,11 @@ name: Deployment
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
+  # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [ main ]
+    branches: [ master ]
   pull_request:
-    branches: [ main ]
+    branches: [ master ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -22,28 +22,29 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      
-      - name: Checkout source code 
+      - name: Checkout source code
         uses: actions/checkout@master
 
       - name: Set up Node.js
         uses: actions/setup-node@master
         with:
-         node-version: 14.x
+          node-version: 14.x
 
-      # Runs a single command using the runners shell
-      - name: install dependencies
+      - name: Install devDependencies
         run: yarn install
 
-      # Runs a set of commands using the runners shell
+      - name: Test unit
+        run: yarn test:unit
+
       - name: Build page
         run: yarn build
         env: 
-         NODE_ENV: production
-      
+          NODE_ENV: production
+
       - name: Deploy to gh-pages
-        run: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v3
         with:
-         github_token: ${{secrets.GITHUB_TOKEN}}
-         publish_dir: ./dist
+          github_token: ${{secrets.GITHUB_TOKEN}}
+          publish_dir: ./dist
+
+      
