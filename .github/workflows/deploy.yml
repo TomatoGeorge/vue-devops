@@ -43,7 +43,7 @@ jobs:
          NODE_ENV: production
       
       - name: Deploy to gh-pages
-        run: ppeaceiris/actions-gh-pages@v3
+        run: peaceiris/actions-gh-pages@v3
         with:
          github_token: ${{secrets.GITHUB_TOKEN}}
          publish_dir: ./dist
